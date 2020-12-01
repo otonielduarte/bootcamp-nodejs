@@ -1,23 +1,22 @@
-/* eslint-disable class-methods-use-this */
 import { getRepository } from 'typeorm';
-import UserModel from '../models/User';
+import User from '../models/User';
 
-interface UserDTO {
+interface UserRequest {
   name: string;
   email: string;
   password: string;
 }
 
 class CreateUserService {
-  public async execute({ name, email, password }: UserDTO): Promise<UserModel> {
-    const repository = getRepository(UserModel);
+  public async execute({ name, email, password }: UserRequest): Promise<User> {
+    const repository = getRepository(User);
 
-    const exists = repository.findOne({
+    const exists = await repository.findOne({
       where: { email },
     });
 
     if (exists) {
-      throw new Error('Email address already used');
+      throw Error('Email address already used.');
     }
 
     const user = repository.create({
