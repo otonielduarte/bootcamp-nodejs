@@ -1,0 +1,38 @@
+version: "3.7"
+
+services:
+  app: &app
+    container_name: gobarber
+    image: bootcamp-nodejs:1.0.0
+    build:
+      context: .
+    command: "yarn dev:server"
+    volumes:
+      - .:/var/www
+    ports:
+      - 3333:3333
+      - 9229:9229
+    depends_on:
+      - database
+
+  database:
+    container_name: gostack_postgres
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=gostack_gobarber
+    ports:
+     - 5432:5432
+    volumes:
+      - db:/var/lib/postgresql/data
+
+  migrations:
+    <<: *app
+    command: "yarn typeorm migration:run"
+
+  revert:
+    <<: *app
+    command: "yarn typeorm migration:revert"
+
+volumes:
+  db: {}

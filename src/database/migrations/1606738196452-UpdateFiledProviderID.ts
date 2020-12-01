@@ -10,6 +10,7 @@ export default class UpdateFiledProviderID1606738196452
   implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.dropColumn('appointments', 'provider');
+
     await queryRunner.addColumn(
       'appointments',
       new TableColumn({
@@ -18,6 +19,7 @@ export default class UpdateFiledProviderID1606738196452
         isNullable: true,
       }),
     );
+
     await queryRunner.createForeignKey(
       'appointments',
       new TableForeignKey({
@@ -32,7 +34,7 @@ export default class UpdateFiledProviderID1606738196452
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropForeignKey('appointment', 'AppointmentProvider');
+    await queryRunner.dropForeignKey('appointments', 'AppointmentProvider');
 
     await queryRunner.dropColumn('appointments', 'provider_id');
 

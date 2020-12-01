@@ -4,5 +4,4 @@ ENV NODE_ENV=development
 COPY . /var/www
 WORKDIR /var/www
 RUN yarn
-ENTRYPOINT ["yarn", "dev:server"]
-EXPOSE 3333
+
