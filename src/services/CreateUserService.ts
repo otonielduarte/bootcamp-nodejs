@@ -10,7 +10,11 @@ interface UserRequest {
 }
 
 class CreateUserService {
-  public async execute({ name, email, password }: UserRequest): Promise<User> {
+  public async execute({
+    name,
+    email,
+    password,
+  }: UserRequest): Promise<Omit<User, 'password'>> {
     const repository = getRepository(User);
 
     const exists = await repository.findOne({
@@ -31,7 +35,9 @@ class CreateUserService {
 
     await repository.save(user);
 
-    return user;
+    const { password: userPassword, ...custom } = user;
+
+    return custom;
   }
 }
 
