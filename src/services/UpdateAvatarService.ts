@@ -3,6 +3,7 @@ import path from 'path';
 import fs from 'fs';
 import uploadConfig from '../config/upload';
 import User from '../models/User';
+import AppError from '../error/AppError';
 
 interface Request {
   user_id: string;
@@ -18,7 +19,7 @@ class UpdateAvatarService {
     const user = await repository.findOne(user_id);
 
     if (!user) {
-      throw new Error('Unauthenticated user');
+      throw new AppError('Unauthenticated user', 401);
     }
 
     if (user.avatar) {

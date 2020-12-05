@@ -4,6 +4,7 @@ import { sign } from 'jsonwebtoken';
 
 import User from '../models/User';
 import auth from '../config/auth';
+import AppError from '../error/AppError';
 
 interface AuthRequest {
   email: string;
@@ -24,21 +25,13 @@ class AuthService {
     const user = await userRepository.findOne({ where: { email } });
 
     if (!user) {
-      throw new Error('Email/Password invalid');
+      throw new AppError('Email/Password invalid', 401);
     }
 
     const passMatch = await compare(password, user.password);
     if (!passMatch) {
-      throw new Error('Email/Password invalid');
+      throw new AppError('Email/Password invalid', 401);
     }
-
-    const userWithoutPass: Omit<User, 'password'> = {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      created_at: user.created_at,
-      updated_at: user.updated_at,
-    };
 
     const { secret, expiresIn } = auth.jwt;
 
@@ -46,6 +39,8 @@ class AuthService {
       subject: user.id,
       expiresIn,
     });
+
+    const { password: userPass, ...userWithoutPass } = user;
 
     return { user: userWithoutPass, token };
   }
