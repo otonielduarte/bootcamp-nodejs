@@ -1,8 +1,8 @@
 import { getRepository } from 'typeorm';
 import { hash } from 'bcryptjs';
 
-import User from '../models/User';
-import AppError from '../error/AppError';
+import User from '../entities/User';
+import AppError from '../../../shared/errors/AppError';
 
 interface UserRequest {
   name: string;
@@ -36,6 +36,7 @@ class CreateUserService {
 
     await repository.save(user);
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password: userPassword, ...custom } = user;
 
     return custom;

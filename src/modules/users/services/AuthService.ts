@@ -2,9 +2,9 @@ import { getRepository } from 'typeorm';
 import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 
-import User from '../models/User';
-import auth from '../config/auth';
-import AppError from '../error/AppError';
+import User from '../entities/User';
+import auth from '../../../config/auth';
+import AppError from '../../../shared/errors/AppError';
 
 interface AuthRequest {
   email: string;
@@ -40,6 +40,7 @@ class AuthService {
       expiresIn,
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password: userPass, ...userWithoutPass } = user;
 
     return { user: userWithoutPass, token };
