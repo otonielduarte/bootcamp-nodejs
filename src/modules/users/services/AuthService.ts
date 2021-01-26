@@ -3,15 +3,15 @@ import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 
 import auth from '@config/auth';
-import User from '@modules/users/infra/entities/User';
+import User from '@modules/users/infra/typeorm/entities/User';
 import AppError from '@shared/errors/AppError';
 
-interface AuthRequest {
+interface IAuthRequest {
   email: string;
   password: string;
 }
 
-interface AuthResponse {
+interface IAuthResponse {
   user: Omit<User, 'password'>;
   token: string;
 }

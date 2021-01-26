@@ -1,10 +1,10 @@
 import { getRepository } from 'typeorm';
 import { hash } from 'bcryptjs';
 
-import User from '@modules/users/infra/entities/User';
+import User from '@modules/users/infra/typeorm/entities/User';
 import AppError from '@shared/errors/AppError';
 
-interface UserRequest {
+interface IUserRequest {
   name: string;
   email: string;
   password: string;

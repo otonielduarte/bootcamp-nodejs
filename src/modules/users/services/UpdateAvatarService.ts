@@ -2,10 +2,10 @@ import { getRepository } from 'typeorm';
 import path from 'path';
 import fs from 'fs';
 import uploadConfig from '@config/upload';
-import User from '@modules/users/infra/entities/User';
+import User from '@modules/users/infra/typeorm/entities/User';
 import AppError from '@shared/errors/AppError';
 
-interface Request {
+interface IRequest {
   user_id: string;
   filename: string;
 }
