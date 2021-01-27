@@ -1,13 +1,11 @@
 import { parseISO } from 'date-fns';
 import { Router } from 'express';
-import AppointmentsRepository from '@modules/appointments/infra/typeorm/repositories/AppointmentsRepository';
 import CreateAppointmentService from '@modules/appointments/services/CreateAppointmentService';
 import ensureAuthenticated from '@shared/infra/http/middlewares/ensureAuthenticated';
+import { container } from 'tsyringe';
 
 const appointmentsRouter = Router();
 appointmentsRouter.use(ensureAuthenticated);
-
-const repository = new AppointmentsRepository();
 
 /* appointmentsRouter.get('/', async (_, response) => {
   // const repository = getCustomRepository(IAppointmentsRepository);
@@ -18,11 +16,11 @@ const repository = new AppointmentsRepository();
 appointmentsRouter.post('/', async (request, response) => {
   const { provider_id, date } = request.body;
 
-  const parsedDate = parseISO(date);
-  const service = new CreateAppointmentService(repository);
+  const service = container.resolve(CreateAppointmentService);
+
   const appointment = await service.execute({
     provider_id,
-    date: parsedDate,
+    date: parseISO(date),
   });
   return response.json(appointment);
 });

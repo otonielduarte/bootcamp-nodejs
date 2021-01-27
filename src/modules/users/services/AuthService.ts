@@ -5,6 +5,8 @@ import { sign } from 'jsonwebtoken';
 import auth from '@config/auth';
 import User from '@modules/users/infra/typeorm/entities/User';
 import AppError from '@shared/errors/AppError';
+import { inject, injectable } from 'tsyringe';
+import IUsersRepository from '../repositories/IUsersRepository';
 
 interface IAuthRequest {
   email: string;
@@ -16,13 +18,18 @@ interface IAuthResponse {
   token: string;
 }
 
+@injectable()
 class AuthService {
+  constructor(
+    @inject('UsersRepository')
+    private repository: IUsersRepository,
+  ) { }
+
   public async execute({
     email,
     password,
-  }: AuthRequest): Promise<AuthResponse> {
-    const userRepository = getRepository(User);
-    const user = await userRepository.findOne({ where: { email } });
+  }: IAuthRequest): Promise<IAuthResponse> {
+    const user = await this.repository.findByEmail(email);
 
     if (!user) {
       throw new AppError('Email/Password invalid', 401);

@@ -3,9 +3,10 @@ import 'reflect-metadata';
 import express, { NextFunction, Request, Response } from 'express';
 import 'express-async-errors';
 import cors from 'cors';
-import router from '@shared/infra/http/routes';
-
 import '@shared/infra/typeorm';
+import '@shared/container';
+
+import router from '@shared/infra/http/routes';
 import uploadConfig from '@config/upload';
 import AppError from '@shared/errors/AppError';
 

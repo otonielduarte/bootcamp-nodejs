@@ -1,7 +1,7 @@
-FROM node:12 as app
+FROM node:12 as install
 LABEL Author="Otoniel Duarte"
 ENV NODE_ENV=development
-COPY . /var/www
-WORKDIR /var/www
+WORKDIR /app
 RUN yarn
+COPY . .
 

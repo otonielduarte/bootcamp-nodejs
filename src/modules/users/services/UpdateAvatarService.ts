@@ -1,22 +1,27 @@
-import { getRepository } from 'typeorm';
 import path from 'path';
 import fs from 'fs';
 import uploadConfig from '@config/upload';
 import User from '@modules/users/infra/typeorm/entities/User';
 import AppError from '@shared/errors/AppError';
+import { inject, injectable } from 'tsyringe';
+import IUsersRepository from '../repositories/IUsersRepository';
 
 interface IRequest {
   user_id: string;
   filename: string;
 }
-
+@injectable()
 class UpdateAvatarService {
+  constructor(
+    @inject('UsersRepository')
+    private repository: IUsersRepository,
+  ) { }
+
   public async execute({
     user_id,
     filename,
-  }: Request): Promise<Omit<User, 'password'>> {
-    const repository = getRepository(User);
-    const user = await repository.findOne(user_id);
+  }: IRequest): Promise<Omit<User, 'password'>> {
+    const user = await this.repository.findById(user_id);
 
     if (!user) {
       throw new AppError('Unauthenticated user', 401);
@@ -31,7 +36,7 @@ class UpdateAvatarService {
     }
     user.avatar = filename;
 
-    await repository.save(user);
+    await this.repository.save(user);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...customUser } = user;
     return customUser;

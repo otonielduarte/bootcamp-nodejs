@@ -3,6 +3,8 @@ import { hash } from 'bcryptjs';
 
 import User from '@modules/users/infra/typeorm/entities/User';
 import AppError from '@shared/errors/AppError';
+import { inject, injectable } from 'tsyringe';
+import IUsersRepository from '../repositories/IUsersRepository';
 
 interface IUserRequest {
   name: string;
@@ -10,17 +12,19 @@ interface IUserRequest {
   password: string;
 }
 
+@injectable()
 class CreateUserService {
+  constructor(
+    @inject('UsersRepository')
+    private repository: IUsersRepository,
+  ) { }
+
   public async execute({
     name,
     email,
     password,
-  }: UserRequest): Promise<Omit<User, 'password'>> {
-    const repository = getRepository(User);
-
-    const exists = await repository.findOne({
-      where: { email },
-    });
+  }: IUserRequest): Promise<Omit<User, 'password'>> {
+    const exists = await this.repository.findByEmail(email);
 
     if (exists) {
       throw new AppError('Email address already used.');
@@ -28,13 +32,11 @@ class CreateUserService {
 
     const hPassword = await hash(password, 8);
 
-    const user = repository.create({
+    const user = await this.repository.create({
       name,
       email,
       password: hPassword,
     });
-
-    await repository.save(user);
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password: userPassword, ...custom } = user;
