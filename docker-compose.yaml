@@ -1,6 +1,13 @@
 version: "3.7"
 
 services:
+  test:
+    build:
+      context: .
+      target: install
+    working_dir: /app/
+    command: "yarn test"
+
   app: &app
     build:
       context: .
