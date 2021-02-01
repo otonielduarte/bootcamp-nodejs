@@ -2,11 +2,11 @@ version: "3.7"
 
 services:
   test:
-    build:
-      context: .
-      target: install
+    image: node:12
     working_dir: /app/
     command: "yarn test"
+    volumes:
+      - .:/app
 
   app: &app
     build:
