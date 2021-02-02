@@ -16,7 +16,7 @@ describe('CreateAppointment', () => {
     expect(appointment.provider_id).toBe('123456');
   });
 
-  it('should be not to create two appointments on the same time', async () => {
+  it('should be not to create two users with the same email', async () => {
     const fakeRepository = new FakeAppointmentsRepository();
     const service = new CreateAppointmentService(fakeRepository);
     const date = new Date(2021, 1, 2, 11);
