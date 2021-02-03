@@ -1,9 +1,9 @@
-import { hash } from 'bcryptjs';
-
 import User from '@modules/users/infra/typeorm/entities/User';
 import AppError from '@shared/errors/AppError';
 import { inject, injectable } from 'tsyringe';
+
 import IUsersRepository from '../repositories/IUsersRepository';
+import IHashProvider from '../providers/HashProvider/models/IHashProvider';
 
 interface IUserRequest {
   name: string;
@@ -15,7 +15,9 @@ interface IUserRequest {
 class CreateUserService {
   constructor(
     @inject('UsersRepository')
+    @inject('HasProvider')
     private repository: IUsersRepository,
+    private hashProvider: IHashProvider,
   ) { }
 
   public async execute({
@@ -29,12 +31,12 @@ class CreateUserService {
       throw new AppError('Email address already used.');
     }
 
-    const hPassword = await hash(password, 8);
+    const hashPassword = await this.hashProvider.generateHash(password);
 
     const user = await this.repository.create({
       name,
       email,
-      password: hPassword,
+      password: hashPassword,
     });
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -8,10 +8,15 @@ services:
     volumes:
       - .:/app
 
+  install:
+    image: node:12
+    working_dir: /app/
+    command: "yarn"
+    volumes:
+      - .:/app
+
   app: &app
-    build:
-      context: .
-      target: install
+    image: node:12
     working_dir: /app/
     command: "yarn dev:server"
     volumes:

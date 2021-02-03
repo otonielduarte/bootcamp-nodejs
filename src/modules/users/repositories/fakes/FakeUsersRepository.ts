@@ -18,12 +18,17 @@ class FakeUsersRepository implements ICreateUserRepository {
       name,
       password,
     });
-    this.save(user);
+    this.users.push(user);
     return user;
   }
 
   public async save(user: User): Promise<User> {
-    this.users.push(user);
+    const index = this.users.findIndex(mUser => mUser.id === user.id);
+    if (index) {
+      this.users[index] = user;
+    } else {
+      this.users.push(user);
+    }
     return user;
   }
 
