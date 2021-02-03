@@ -19,6 +19,8 @@ services:
     image: node:12
     working_dir: /app/
     command: "yarn dev:server"
+    environment:
+      - APP_PORT=3333
     volumes:
       - .:/app
     ports:
