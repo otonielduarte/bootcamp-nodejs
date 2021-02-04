@@ -34,7 +34,7 @@ describe('AuthenticateUser', () => {
   });
 
   it('should be not allowed authenticate with invalid user', async () => {
-    expect(
+    await expect(
       authService.execute({
         email: 'jhondoe@example.com',
         password: '123456',
@@ -49,7 +49,7 @@ describe('AuthenticateUser', () => {
       password: '123456',
     });
 
-    expect(
+    await expect(
       authService.execute({
         email: user.email,
         password: '123456aaa',
