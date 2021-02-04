@@ -4,6 +4,7 @@ import uploadConfig from '@config/upload';
 import User from '@modules/users/infra/typeorm/entities/User';
 import AppError from '@shared/errors/AppError';
 import { inject, injectable } from 'tsyringe';
+import IStorageProvider from '@shared/container/providers/StorageProvider/models/IStorageProvider';
 import IUsersRepository from '../repositories/IUsersRepository';
 
 interface IRequest {
@@ -15,6 +16,9 @@ class UpdateAvatarService {
   constructor(
     @inject('UsersRepository')
     private repository: IUsersRepository,
+
+    @inject('StorageProvider')
+    private storageProvider: IStorageProvider,
   ) { }
 
   public async execute({
@@ -28,13 +32,12 @@ class UpdateAvatarService {
     }
 
     if (user.avatar) {
-      const currentFilePath = path.join(uploadConfig.directory, user.avatar);
-      const existsAvatar = await fs.promises.stat(currentFilePath);
-      if (existsAvatar) {
-        await fs.promises.unlink(currentFilePath);
-      }
+      await this.storageProvider.deleteFile(user.avatar);
     }
-    user.avatar = filename;
+
+    const savedFilename = await this.storageProvider.saveFile(filename);
+
+    user.avatar = savedFilename;
 
     await this.repository.save(user);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

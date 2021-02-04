@@ -4,15 +4,22 @@ import FakeHashProvider from '../providers/HashProvider/fakes/FakeHashProvider';
 import AuthService from './AuthService';
 import CreateUserService from './CreateUserService';
 
+let fakeUsersRepository: FakeUsersRepository;
+let fakeHashProvider: FakeHashProvider;
+let authService: AuthService;
+let createUser: CreateUserService;
+
 describe('AuthenticateUser', () => {
+  beforeEach(() => {
+    fakeUsersRepository = new FakeUsersRepository();
+    fakeHashProvider = new FakeHashProvider();
+
+    authService = new AuthService(fakeUsersRepository, fakeHashProvider);
+    createUser = new CreateUserService(fakeUsersRepository, fakeHashProvider);
+  });
+
   it('should be able to authenticate a user', async () => {
-    const fakeRepository = new FakeUsersRepository();
-    const fakeHashProvider = new FakeHashProvider();
-
-    const userService = new CreateUserService(fakeRepository, fakeHashProvider);
-    const authService = new AuthService(fakeRepository, fakeHashProvider);
-
-    await userService.execute({
+    await createUser.execute({
       name: 'Jhon Doe',
       email: 'jhondoe@example.com',
       password: '123456',
@@ -26,35 +33,17 @@ describe('AuthenticateUser', () => {
     expect(response).toHaveProperty('token');
   });
 
-  it('should be not allowed users with invalid email', async () => {
-    const fakeRepository = new FakeUsersRepository();
-    const fakeHashProvider = new FakeHashProvider();
-
-    const userService = new CreateUserService(fakeRepository, fakeHashProvider);
-    const authService = new AuthService(fakeRepository, fakeHashProvider);
-
-    await userService.execute({
-      name: 'Jhon Doe',
-      email: 'jhondoe@example.com',
-      password: '123456',
-    });
-
+  it('should be not allowed authenticate with invalid user', async () => {
     expect(
       authService.execute({
-        email: 'invalid@email.com',
+        email: 'jhondoe@example.com',
         password: '123456',
       }),
     ).rejects.toBeInstanceOf(AppError);
   });
 
   it('should be not allowed users with invalid password', async () => {
-    const fakeRepository = new FakeUsersRepository();
-    const fakeHashProvider = new FakeHashProvider();
-
-    const userService = new CreateUserService(fakeRepository, fakeHashProvider);
-    const authService = new AuthService(fakeRepository, fakeHashProvider);
-
-    const user = await userService.execute({
+    const user = await createUser.execute({
       name: 'Jhon Doe',
       email: 'otonielduarte2@gmail.com',
       password: '123456',
