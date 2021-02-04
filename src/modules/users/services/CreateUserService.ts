@@ -15,8 +15,8 @@ interface IUserRequest {
 class CreateUserService {
   constructor(
     @inject('UsersRepository')
-    @inject('HasProvider')
     private repository: IUsersRepository,
+    @inject('HasProvider')
     private hashProvider: IHashProvider,
   ) { }
 

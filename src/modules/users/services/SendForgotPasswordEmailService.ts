@@ -4,6 +4,7 @@ import AppError from '@shared/errors/AppError';
 import { inject, injectable } from 'tsyringe';
 
 import IUsersRepository from '../repositories/IUsersRepository';
+import IUserTokensRepository from '../repositories/IUserTokensRepository';
 
 interface IUserRequest {
   email: string;
@@ -14,8 +15,12 @@ class SendForgotPasswordEmalService {
   constructor(
     @inject('UsersRepository')
     private repository: IUsersRepository,
+
     @inject('MailProvider')
     private mailProvider: IMailProvider,
+
+    @inject('UserTokensReposiroty')
+    private userTokensRepository: IUserTokensRepository,
   ) { }
 
   public async execute({ email }: IUserRequest): Promise<User | undefined> {
@@ -25,7 +30,9 @@ class SendForgotPasswordEmalService {
       throw new AppError('User not existis');
     }
 
-    this.mailProvider.sendMail(user.email, 'Message');
+    const token = await this.userTokensRepository.generate(user.id);
+
+    this.mailProvider.sendMail(user.email, token.token);
 
     return user;
   }
