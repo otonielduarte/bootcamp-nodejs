@@ -39,8 +39,6 @@ class ResetPasswordService {
       throw new AppError('User non-exists');
     }
 
-    user.password = await this.hashProvider.generateHash(password);
-
     const tokenCreatedAt = userToken.created_at;
     const compareDate = addHours(tokenCreatedAt, 2);
     const dateNow = Date.now();
@@ -50,6 +48,8 @@ class ResetPasswordService {
     }
 
     user.password = await this.hashProvider.generateHash(password);
+    await this.userRepository.save(user);
+
     return user;
   }
 }

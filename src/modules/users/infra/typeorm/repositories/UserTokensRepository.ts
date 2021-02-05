@@ -1,5 +1,6 @@
 import { getRepository, Repository } from 'typeorm';
 import IUserTokensRepository from '@modules/users/repositories/IUserTokensRepository';
+
 import UserTokens from '../entities/UserTokens';
 
 class UserTokensRepository implements IUserTokensRepository {
@@ -15,7 +16,8 @@ class UserTokensRepository implements IUserTokensRepository {
   }
 
   public async generate(user_id: string): Promise<UserTokens> {
-    const userToken = this.repository.save({ user_id });
+    const userToken = this.repository.create({ user_id });
+    await this.repository.save(userToken);
     return userToken;
   }
 }
