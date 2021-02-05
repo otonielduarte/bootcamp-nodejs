@@ -21,7 +21,8 @@ class UsersRepository implements ICreateUserRepository {
   }
 
   public async save(user: User): Promise<User> {
-    return this.repository.save(user);
+    const savedUser = await this.repository.save(user);
+    return savedUser;
   }
 
   public async findById(id: string): Promise<User | undefined> {

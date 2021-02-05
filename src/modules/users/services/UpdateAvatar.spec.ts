@@ -7,6 +7,37 @@ let updateService: UpdateAvatarService;
 let fakeUserRepository: FakeUsersRepository;
 let fakeStorageProvider: FakeStorageProvider;
 
+const scenarios = {
+  updateAvatar: {
+    user: {
+      name: 'John doe',
+      email: 'johndoe@exame.com',
+      password: '123121',
+    },
+    avatar1: {
+      filename: 'file-avatar.jpg',
+    },
+    avatar2: {
+      filename: 'new-avatar.jpg',
+    },
+    expected: { filename: 'file-avatar.jpg' },
+  },
+  updateAvatarTeste: {
+    user: {
+      name: 'João da silva',
+      email: 'johndoe@exame.com',
+      password: '123121',
+    },
+    avatar1: {
+      filename: 'file-avatar.jpg',
+    },
+    avatar2: {
+      filename: 'new-avatar.jpg',
+    },
+    expected: { filename: 'file-avatar.jpg' },
+  },
+};
+
 describe('UpdateAvatarService', () => {
   beforeEach(() => {
     fakeUserRepository = new FakeUsersRepository();
@@ -42,7 +73,28 @@ describe('UpdateAvatarService', () => {
     ).rejects.toBeInstanceOf(AppError);
   });
 
-  it('should delete old avatar when users has an avatar', async () => {
+  it.each([
+    [
+      'should delete old avatar when users has an avatar',
+      scenarios.updateAvatar,
+    ],
+    [
+      'should delete old avatar when users has do joão da silva',
+      scenarios.updateAvatarTeste,
+    ],
+  ])('Test: %s ', async (_, cenario) => {
+    const actionDelete = jest.spyOn(fakeStorageProvider, 'deleteFile');
+
+    const user = await fakeUserRepository.create(cenario.user);
+
+    await updateService.execute({ user_id: user.id, ...cenario.avatar1 });
+
+    await updateService.execute({ user_id: user.id, ...cenario.avatar2 });
+
+    expect(actionDelete).toHaveBeenCalledWith(cenario.expected.filename);
+  });
+
+  /*  it('should delete old avatar when users has an avatar', async () => {
     const actionDelete = jest.spyOn(fakeStorageProvider, 'deleteFile');
 
     const user = await fakeUserRepository.create({
@@ -63,5 +115,5 @@ describe('UpdateAvatarService', () => {
 
     expect(actionDelete).toHaveBeenCalledWith('file_avatar.jpg');
     expect(user.avatar).toBe('new-avatar.jpg');
-  });
+  }); */
 });

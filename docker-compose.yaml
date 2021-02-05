@@ -1,28 +1,22 @@
-version: "3.7"
+version: "3.8"
 
 services:
-  test:
+  test: &default
     image: node:12
     working_dir: /app/
     command: "yarn test"
-    volumes:
-      - .:/app
-
-  install:
-    image: node:12
-    working_dir: /app/
-    command: "yarn"
-    volumes:
-      - .:/app
-
-  app: &app
-    image: node:12
-    working_dir: /app/
-    command: "yarn dev:server"
     environment:
       - APP_PORT=3333
     volumes:
       - .:/app
+
+  install:
+    <<: *default
+    command: "yarn"
+
+  app: &app
+    <<: *default
+    command: "yarn dev:server"
     ports:
       - 3333:3333
       - 9229:9229

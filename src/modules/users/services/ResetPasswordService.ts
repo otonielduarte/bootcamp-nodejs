@@ -1,8 +1,9 @@
 import User from '@modules/users/infra/typeorm/entities/User';
 import AppError from '@shared/errors/AppError';
+import { addHours, isAfter } from 'date-fns';
 import { inject, injectable } from 'tsyringe';
-import IHashProvider from '../providers/HashProvider/models/IHashProvider';
 
+import IHashProvider from '../providers/HashProvider/models/IHashProvider';
 import IUsersRepository from '../repositories/IUsersRepository';
 import IUserTokensRepository from '../repositories/IUserTokensRepository';
 
@@ -15,12 +16,12 @@ interface IResetRequest {
 class ResetPasswordService {
   constructor(
     @inject('UsersRepository')
-    private repository: IUsersRepository,
+    private userRepository: IUsersRepository,
 
     @inject('UserTokensReposiroty')
     private userTokensRepository: IUserTokensRepository,
 
-    @inject('HasProvider')
+    @inject('HashProvider')
     private hashProvider: IHashProvider,
   ) { }
 
@@ -33,9 +34,21 @@ class ResetPasswordService {
       throw new AppError('Token is inválid');
     }
 
-    const user = await this.repository.findById(userToken.id);
+    const user = await this.userRepository.findById(userToken.user_id);
     if (!user) {
       throw new AppError('User non-exists');
+    }
+
+    user.password = await this.hashProvider.generateHash(password);
+
+    const tokenCreatedAt = userToken.created_at;
+    const compareDate = addHours(tokenCreatedAt, 2);
+    const dateNow = Date.now();
+    console.log(new Date(dateNow));
+    console.log('compareDate', compareDate);
+
+    if (isAfter(dateNow, compareDate)) {
+      throw new AppError('Token expired');
     }
 
     user.password = await this.hashProvider.generateHash(password);
