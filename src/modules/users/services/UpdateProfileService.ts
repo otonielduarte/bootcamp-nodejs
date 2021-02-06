@@ -48,9 +48,8 @@ class UpdateProfileService {
       }
       user.password = await this.hashProvider.generateHash(password);
     }
-
-    user.name = name;
-    user.email = email;
+    if (name) user.name = name;
+    if (email) user.email = email;
 
     await this.repository.save(user);
 
