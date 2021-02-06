@@ -1,9 +1,10 @@
 import { v4 as uuid } from 'uuid';
-import ICreateUserRepository from '@modules/users/repositories/IUsersRepository';
+import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import User from '@modules/users/infra/typeorm/entities/User';
 import ICreateUserDTO from '@modules/users/infra/dtos/ICreateUserDTO';
+import IFindAllUsersDTO from '@modules/users/infra/dtos/IFindAllUsersDTO';
 
-class FakeUsersRepository implements ICreateUserRepository {
+class FakeUsersRepository implements IUsersRepository {
   users: User[] = [];
 
   public async create({
@@ -40,6 +41,13 @@ class FakeUsersRepository implements ICreateUserRepository {
   public async findByEmail(email: string): Promise<User | undefined> {
     const user = this.users.find(mUser => mUser.email === email);
     return user;
+  }
+
+  public async findAll({ exclude_id }: IFindAllUsersDTO): Promise<User[]> {
+    if (exclude_id) {
+      return this.users.filter(user => user.id !== exclude_id);
+    }
+    return this.users;
   }
 }
 
