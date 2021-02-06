@@ -12,7 +12,6 @@ const userAvatarController = new UsersAvatarController();
 const upload = multer(uploadConfig);
 
 usersRouter.post('/', usersController.create);
-usersRouter.put('/{user_id}', usersController.update);
 
 usersRouter.patch(
   '/avatar',

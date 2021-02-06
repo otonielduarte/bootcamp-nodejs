@@ -17,9 +17,4 @@ export default class UsersController {
 
     return response.json(user);
   }
-
-  public async update(request: Request, response: Response): Promise<Response> {
-    const { user } = request.body;
-    return response.json({ user });
-  }
 }

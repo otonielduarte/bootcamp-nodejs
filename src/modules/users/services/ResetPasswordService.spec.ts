@@ -3,7 +3,7 @@ import FakeHashProvider from '../providers/HashProvider/fakes/FakeHashProvider';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 import FakeUserTokensRepository from '../repositories/fakes/FakeUserTokensRepository';
 import ResetPassWordService from './ResetPasswordService';
-import scenarios from './ResetPassWordService.mocks';
+import scenarios from './mocks/ResetPassWordService.mocks';
 
 let resetPasswordService: ResetPassWordService;
 let fakeUserRepository: FakeUsersRepository;
