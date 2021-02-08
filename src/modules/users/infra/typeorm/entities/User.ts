@@ -1,10 +1,12 @@
 /* eslint-disable camelcase */
+import Appointment from '@modules/appointments/infra/typeorm/entities/Appointment';
 import {
   Column,
   Entity,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
 
 @Entity('users')
@@ -20,6 +22,12 @@ class User {
 
   @Column()
   avatar: string;
+
+  @OneToMany(() => Appointment, appointment => appointment.user)
+  user: Appointment;
+
+  @OneToMany(() => Appointment, appointment => appointment.provider)
+  provider: Appointment;
 
   @Column()
   password: string;
