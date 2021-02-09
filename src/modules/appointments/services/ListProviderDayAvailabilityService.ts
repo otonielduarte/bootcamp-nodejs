@@ -3,7 +3,7 @@ import { getHours, isAfter } from 'date-fns';
 
 import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
 
-interface IRequest {
+export interface IRequest {
   provider_id: string;
   day: number;
   month: number;
