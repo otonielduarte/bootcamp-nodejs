@@ -22,6 +22,7 @@ services:
       - 9229:9229
     depends_on:
       - database
+      - mongodb
 
   database:
     container_name: gostack_postgres
@@ -34,6 +35,14 @@ services:
     volumes:
       - db:/var/lib/postgresql/data
 
+  mongodb:
+    container_name: gostack_mongodb
+    image: mongo
+    ports:
+     - 27017:27017
+    volumes:
+      - mongodata:/data/db
+
   migrations:
     <<: *app
     command: "yarn typeorm migration:run"
@@ -44,3 +53,4 @@ services:
 
 volumes:
   db: {}
+  mongodata: {}

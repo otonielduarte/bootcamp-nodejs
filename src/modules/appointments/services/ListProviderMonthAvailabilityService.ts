@@ -1,4 +1,4 @@
-import { getDate, getDaysInMonth } from 'date-fns';
+import { getDate, getDaysInMonth, isAfter, isBefore } from 'date-fns';
 import { injectable, inject } from 'tsyringe';
 
 import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
@@ -49,21 +49,9 @@ class ListProviderMonthAvailability {
         return getDate(appointment.date) === day;
       });
 
-      let available = true;
-
-      if (year < currentDate.getFullYear()) {
-        available = false;
-      } else if (month < currentDate.getMonth()) {
-        available = false;
-      } else if (day < currentDate.getDate()) {
-        available = false;
-      } else {
-        available = appointmentsInDay.length < 10;
-      }
-
       return {
         day,
-        available,
+        available: appointmentsInDay.length < 10,
       };
     });
 

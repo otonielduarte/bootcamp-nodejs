@@ -1,16 +1,10 @@
 /* eslint-disable camelcase */
 import Appointment from '@modules/appointments/infra/typeorm/entities/Appointment';
-import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-  OneToMany,
-} from 'typeorm';
+import BaseEntity from '@modules/common/infra/typeorm/entities/BaseEntity';
+import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity('users')
-class User {
+class User extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -31,12 +25,6 @@ class User {
 
   @Column()
   password: string;
-
-  @CreateDateColumn()
-  created_at: Date;
-
-  @UpdateDateColumn()
-  updated_at: Date;
 }
 
 export default User;

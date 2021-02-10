@@ -1,14 +1,8 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-  Generated,
-} from 'typeorm';
+import BaseEntity from '@modules/common/infra/typeorm/entities/BaseEntity';
+import { Entity, Column, PrimaryGeneratedColumn, Generated } from 'typeorm';
 
 @Entity('user_tokens')
-class UserToken {
+class UserToken extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -18,12 +12,6 @@ class UserToken {
 
   @Column()
   user_id: string;
-
-  @CreateDateColumn()
-  created_at: Date;
-
-  @UpdateDateColumn()
-  updated_at: Date;
 }
 
 export default UserToken;

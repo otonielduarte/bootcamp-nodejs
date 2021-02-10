@@ -3,15 +3,14 @@ import {
   Column,
   Entity,
   PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
 import User from '@modules/users/infra/typeorm/entities/User';
+import BaseEntity from '@modules/common/infra/typeorm/entities/BaseEntity';
 
 @Entity('appointments')
-class Appointment {
+class Appointment extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -31,12 +30,6 @@ class Appointment {
 
   @Column('timestamp with time zone')
   date: Date;
-
-  @CreateDateColumn()
-  created_at: Date;
-
-  @UpdateDateColumn()
-  updated_at: Date;
 }
 
 export default Appointment;
