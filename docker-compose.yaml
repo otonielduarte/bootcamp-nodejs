@@ -7,6 +7,8 @@ services:
     command: "yarn test"
     environment:
       - APP_PORT=3333
+      - APP_SECRET=e82b99be76d50e7725045465ae11c80a
+      - WEB_DOMAIN=http://localhost:3000
     volumes:
       - .:/app
 
