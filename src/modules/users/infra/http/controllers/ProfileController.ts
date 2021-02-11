@@ -1,9 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Request, Response } from 'express';
 import UpdateProfileService from '@modules/users/services/UpdateProfileService';
 import ShowProfileService from '@modules/users/services/ShowProfileService';
 
 import { container } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 
 export default class ProfileController {
   public async show(request: Request, response: Response): Promise<Response> {
@@ -12,9 +12,7 @@ export default class ProfileController {
     const service = container.resolve(ShowProfileService);
     const user = await service.execute({ user_id });
 
-    const { password, ...userResponse } = user;
-
-    return response.json({ userResponse });
+    return response.json(classToClass(user));
   }
 
   public async update(request: Request, response: Response): Promise<Response> {
@@ -31,8 +29,6 @@ export default class ProfileController {
       old_password,
     });
 
-    const { password: userPassoword, ...userResponse } = user;
-
-    return response.json(userResponse);
+    return response.json(classToClass(user));
   }
 }

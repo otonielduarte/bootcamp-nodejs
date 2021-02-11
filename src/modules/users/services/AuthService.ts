@@ -4,6 +4,7 @@ import auth from '@config/auth';
 import User from '@modules/users/infra/typeorm/entities/User';
 import AppError from '@shared/errors/AppError';
 import { inject, injectable } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 import IUsersRepository from '../repositories/IUsersRepository';
 import IHashProvider from '../providers/HashProvider/models/IHashProvider';
 
@@ -13,7 +14,7 @@ interface IAuthRequest {
 }
 
 interface IAuthResponse {
-  user: Omit<User, 'password'>;
+  user: User;
   token: string;
 }
 
@@ -45,17 +46,14 @@ class AuthService {
       throw new AppError('Email/Password invalid', 401);
     }
 
-    const { secret, expiresIn } = auth.jwt;
+    const { secret = '', expiresIn } = auth.jwt;
 
     const token = sign({}, secret, {
       subject: user.id,
       expiresIn,
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password: userPass, ...userWithoutPass } = user;
-
-    return { user: userWithoutPass, token };
+    return { user: classToClass(user), token };
   }
 }
 

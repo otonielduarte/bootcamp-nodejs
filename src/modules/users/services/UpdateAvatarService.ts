@@ -18,10 +18,7 @@ class UpdateAvatarService {
     private storageProvider: IStorageProvider,
   ) { }
 
-  public async execute({
-    user_id,
-    filename,
-  }: IRequest): Promise<Omit<User, 'password'>> {
+  public async execute({ user_id, filename }: IRequest): Promise<User> {
     const user = await this.repository.findById(user_id);
 
     if (!user) {
@@ -37,9 +34,8 @@ class UpdateAvatarService {
     user.avatar = savedFilename;
 
     await this.repository.save(user);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...customUser } = user;
-    return customUser;
+
+    return user;
   }
 }
 

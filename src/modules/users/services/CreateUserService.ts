@@ -20,11 +20,7 @@ class CreateUserService {
     private hashProvider: IHashProvider,
   ) { }
 
-  public async execute({
-    name,
-    email,
-    password,
-  }: IUserRequest): Promise<Omit<User, 'password'>> {
+  public async execute({ name, email, password }: IUserRequest): Promise<User> {
     const exists = await this.repository.findByEmail(email);
 
     if (exists) {
@@ -39,10 +35,7 @@ class CreateUserService {
       password: hashPassword,
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password: userPassword, ...custom } = user;
-
-    return custom;
+    return user;
   }
 }
 
