@@ -52,7 +52,7 @@ class SendForgotPasswordEmalService {
         variables: {
           name: user.name,
           token,
-          link: `${process.env.WEB_DOMAIN}/reset_password?token=${token}`,
+          link: `${process.env.APP_WEB_DOMAIN}/reset_password?token=${token}`,
         },
       },
     });

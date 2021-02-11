@@ -31,7 +31,7 @@ class User extends BaseEntity {
   @Expose({ name: 'avatar_url' })
   getAvatarUrl(): string | null {
     return this.avatar
-      ? `${process.env.WEB_DOMAIN}/files/${this.avatar}`
+      ? `${process.env.APP_DOMAIN}/files/${this.avatar}`
       : null;
   }
 }
