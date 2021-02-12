@@ -18,6 +18,13 @@ services:
       - MONGO_HOST=gostack_mongodb
       - MONGO_PORT=27017
       - MONGO_DATABASE=gobarber
+      - MAIL_DRIVER=ethereal
+      - AWS_ACCESS_KEY_ID=
+      - AWS_SECRET_ACCESS_KEY=
+      - AWS_REGION=us-east-1
+      - AWS_MAIL_API_VERSION=2010-12-01
+      - DEFAULT_EMAIL=jhondoe@example.com
+      - DEFAULT_EMAIL_NAME="Jhon Doe"
     volumes:
       - .:/app
 
