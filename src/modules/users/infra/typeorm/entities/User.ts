@@ -1,8 +1,9 @@
-/* eslint-disable camelcase */
-import Appointment from '@modules/appointments/infra/typeorm/entities/Appointment';
-import BaseEntity from '@modules/common/infra/typeorm/entities/BaseEntity';
 import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { Exclude, Expose } from 'class-transformer';
+import uploadConfig from '@config/upload';
+
+import Appointment from '@modules/appointments/infra/typeorm/entities/Appointment';
+import BaseEntity from '@modules/common/infra/typeorm/entities/BaseEntity';
 
 @Entity('users')
 class User extends BaseEntity {
@@ -30,9 +31,17 @@ class User extends BaseEntity {
 
   @Expose({ name: 'avatar_url' })
   getAvatarUrl(): string | null {
-    return this.avatar
-      ? `${process.env.APP_DOMAIN}/files/${this.avatar}`
-      : null;
+    if (!this.avatar) {
+      return null;
+    }
+
+    switch (process.env.STORAGE_DRIVER) {
+      case 's3':
+        return `https://${uploadConfig.config.aws.bucket}.s3.amazonaws.com/${this.avatar}`;
+      case 'disk':
+      default:
+        return `${process.env.APP_API_URL}/files/${this.avatar}`;
+    }
   }
 }
 

@@ -7,7 +7,7 @@ class DiskStorageProvider implements IStorageProvider {
   public async saveFile(file: string): Promise<string> {
     await fs.promises.rename(
       path.resolve(uploadConfig.directory, file),
-      path.resolve(uploadConfig.uploadFolder, file),
+      path.resolve(uploadConfig.uploadsFolder, file),
     );
     return file;
   }

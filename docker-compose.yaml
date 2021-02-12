@@ -25,6 +25,7 @@ services:
       - AWS_MAIL_API_VERSION=2010-12-01
       - DEFAULT_EMAIL=jhondoe@example.com
       - DEFAULT_EMAIL_NAME="Jhon Doe"
+      - STORAGE_DRIVER=disk
     volumes:
       - .:/app
 
