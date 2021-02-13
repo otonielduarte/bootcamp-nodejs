@@ -4,6 +4,8 @@ node_modules
 secrets.txt
 ormconfig.json
 
+coverage
+
 
 *.log
 
