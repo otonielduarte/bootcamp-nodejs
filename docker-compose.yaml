@@ -26,6 +26,10 @@ services:
       - DEFAULT_EMAIL=jhondoe@example.com
       - DEFAULT_EMAIL_NAME="Jhon Doe"
       - STORAGE_DRIVER=disk
+      - CACHE_DRIVER=redis
+      - REDIS_PORT=6379
+      - REDIS_HOST=127.0.0.1
+      - REDIS_PASSWORD=
     volumes:
       - .:/app
 
@@ -42,6 +46,7 @@ services:
     depends_on:
       - database
       - mongodb
+      - redis
 
   database:
     container_name: gostack_postgres
@@ -50,7 +55,7 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=gostack_gobarber
     ports:
-     - 5432:5432
+      - 5432:5432
     volumes:
       - db:/var/lib/postgresql/data
 
@@ -58,9 +63,17 @@ services:
     container_name: gostack_mongodb
     image: mongo
     ports:
-     - 27017:27017
+      - 27017:27017
     volumes:
       - mongodata:/data/db
+
+  redis:
+    image: redis:alpine
+    container_name: gostack_redis
+    ports:
+     - 6379:6379
+    volumes:
+      - redis_data:/data
 
   migrations:
     <<: *app
@@ -73,3 +86,4 @@ services:
 volumes:
   db: {}
   mongodata: {}
+  redis_data: {}

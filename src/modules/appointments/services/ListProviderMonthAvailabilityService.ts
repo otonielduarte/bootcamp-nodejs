@@ -1,6 +1,7 @@
-import { getDate, getDaysInMonth, isAfter, isBefore } from 'date-fns';
+import { getDate, getDaysInMonth } from 'date-fns';
 import { injectable, inject } from 'tsyringe';
-
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
+import Appointment from '../infra/typeorm/entities/Appointment';
 import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
 
 interface IRequest {
@@ -19,6 +20,9 @@ class ListProviderMonthAvailability {
   constructor(
     @inject('AppointmentsRepository')
     private appointmentsRepository: IAppointmentsRepository,
+
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider,
   ) { }
 
   public async execute({
@@ -26,16 +30,24 @@ class ListProviderMonthAvailability {
     year,
     month,
   }: IRequest): Promise<IResponse> {
-    const appointments = await this.appointmentsRepository.findAllInMonthFromProvider(
-      {
-        provider_id,
-        year,
-        month,
-      },
+    const cacheKey = `provider-appointments:${provider_id}:${year}-${month}`;
+
+    let appointments = await this.cacheProvider.recover<Appointment[]>(
+      cacheKey,
     );
 
+    if (!appointments) {
+      appointments = await this.appointmentsRepository.findAllInMonthFromProvider(
+        {
+          provider_id,
+          year,
+          month,
+        },
+      );
+      await this.cacheProvider.save(cacheKey, appointments);
+    }
+
     const numberOfDaysInMonth = getDaysInMonth(new Date(year, month - 1));
-    const currentDate = new Date(Date.now());
 
     const eachDayArray = Array.from(
       {
@@ -45,7 +57,7 @@ class ListProviderMonthAvailability {
     );
 
     const availability = eachDayArray.map(day => {
-      const appointmentsInDay = appointments.filter(appointment => {
+      const appointmentsInDay = (appointments || []).filter(appointment => {
         return getDate(appointment.date) === day;
       });
 

@@ -1,5 +1,6 @@
 import User from '@modules/users/infra/typeorm/entities/User';
 import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUsersRepository';
+import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
 import ListProvidersService from './ListProvidersService';
 import { scenarios, listUsers } from './mocks/ListProvidersService.mock';
 
@@ -9,8 +10,12 @@ let loggedUser: User;
 
 describe('ListProviders', () => {
   beforeEach(() => {
+    const fakeCacheProvider = new FakeCacheProvider();
     fakeUsersRepository = new FakeUsersRepository();
-    listProvidersService = new ListProvidersService(fakeUsersRepository);
+    listProvidersService = new ListProvidersService(
+      fakeUsersRepository,
+      fakeCacheProvider,
+    );
 
     listUsers.forEach(async (user, index) => {
       const createdUser = await fakeUsersRepository.create(user);

@@ -35,7 +35,7 @@ describe('UpdateProfile', () => {
     ['should be able update email field', scenarios.emailUpdate],
     ['should be able update password', scenarios.passwordUpdate],
   ])('Test: %s ', async (_, scenario) => {
-    const updatedUser = await updateProfileService.update({
+    const updatedUser = await updateProfileService.execute({
       user_id: user.id,
       ...scenario.valuesToUpdate,
     });
@@ -53,7 +53,7 @@ describe('UpdateProfile', () => {
       password: '123456',
     });
     await expect(
-      updateProfileService.update({
+      updateProfileService.execute({
         ...user2,
         user_id: user.id,
       }),
@@ -62,7 +62,7 @@ describe('UpdateProfile', () => {
 
   it('Test: should not be able update non-existing user', async () => {
     await expect(
-      updateProfileService.update({
+      updateProfileService.execute({
         ...user,
         user_id: 'non-existing',
       }),
@@ -71,7 +71,7 @@ describe('UpdateProfile', () => {
 
   it('Test: should not be able update password without old_password', async () => {
     await expect(
-      updateProfileService.update({
+      updateProfileService.execute({
         ...user,
         user_id: user.id,
         password: '654321',
@@ -81,7 +81,7 @@ describe('UpdateProfile', () => {
 
   it('Test: should not be able update password with wrong old_password', async () => {
     await expect(
-      updateProfileService.update({
+      updateProfileService.execute({
         ...user,
         user_id: user.id,
         old_password: '654321',
