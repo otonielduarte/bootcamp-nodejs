@@ -17,7 +17,7 @@ class Appointment extends BaseEntity {
   @Column()
   provider_id: string;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, user => user.appointment)
   @JoinColumn({ name: 'provider_id' })
   provider: User;
 

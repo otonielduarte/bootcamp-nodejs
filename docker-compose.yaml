@@ -28,7 +28,7 @@ services:
       - STORAGE_DRIVER=disk
       - CACHE_DRIVER=redis
       - REDIS_PORT=6379
-      - REDIS_HOST=127.0.0.1
+      - REDIS_HOST=gostack_redis
       - REDIS_PASSWORD=
     volumes:
       - .:/app
@@ -40,6 +40,7 @@ services:
   app: &app
     <<: *default
     command: "yarn dev:server"
+    container_name: gostack_server
     ports:
       - 3333:3333
       - 9229:9229

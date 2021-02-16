@@ -13,9 +13,9 @@ export default {
 
   configs: {
     redis: {
-      port: process.env.REDIS_PORT,
+      port: Number(process.env.REDIS_PORT),
       host: process.env.REDIS_HOST,
-      password: process.env.REDIS_PASSWORD,
+      password: process.env.REDIS_PASSWORD || undefined,
     },
   },
 } as ICacheConfig;

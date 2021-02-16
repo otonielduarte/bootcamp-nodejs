@@ -10,6 +10,7 @@ let createAppointment: CreateAppointmentService;
 describe('CreateAppointment', () => {
   beforeEach(() => {
     const fakeAppointmentsRepository = new FakeAppointmentsRepository();
+
     const fakeNotificationsRepository = new FakeNotificationsRepository();
     const fakeCacheProvider = new FakeCacheProvider();
     createAppointment = new CreateAppointmentService(

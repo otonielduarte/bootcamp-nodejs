@@ -10,5 +10,11 @@ WORKDIR /app
 RUN yarn
 
 
+FROM install as server
+WORKDIR /app
+COPY --from=dependencies /app/node_modules node_modules/
+CMD [ "yarn dev:server" ]
+
+
 
 

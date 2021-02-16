@@ -20,7 +20,7 @@ class User extends BaseEntity {
   avatar: string;
 
   @OneToMany(() => Appointment, appointment => appointment.user)
-  user: Appointment;
+  appointment: Appointment;
 
   @OneToMany(() => Appointment, appointment => appointment.provider)
   provider: Appointment;
