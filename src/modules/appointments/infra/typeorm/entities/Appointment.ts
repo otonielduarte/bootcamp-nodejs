@@ -1,23 +1,24 @@
-/* eslint-disable camelcase */
 import {
-  Column,
   Entity,
+  Column,
   PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
+
 import User from '@modules/users/infra/typeorm/entities/User';
-import BaseEntity from '@modules/common/infra/typeorm/entities/BaseEntity';
 
 @Entity('appointments')
-class Appointment extends BaseEntity {
+class Appointment {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
   provider_id: string;
 
-  @ManyToOne(() => User, user => user.appointment)
+  @ManyToOne(() => User)
   @JoinColumn({ name: 'provider_id' })
   provider: User;
 
@@ -30,6 +31,12 @@ class Appointment extends BaseEntity {
 
   @Column('timestamp with time zone')
   date: Date;
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 }
 
 export default Appointment;

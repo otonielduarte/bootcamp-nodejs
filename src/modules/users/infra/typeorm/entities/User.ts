@@ -1,9 +1,14 @@
-import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  BaseEntity,
+} from 'typeorm';
 import { Exclude, Expose } from 'class-transformer';
-import uploadConfig from '@config/upload';
 
-import Appointment from '@modules/appointments/infra/typeorm/entities/Appointment';
-import BaseEntity from '@modules/common/infra/typeorm/entities/BaseEntity';
+import uploadConfig from '@config/upload';
 
 @Entity('users')
 class User extends BaseEntity {
@@ -17,17 +22,11 @@ class User extends BaseEntity {
   email: string;
 
   @Column()
-  avatar: string;
-
-  @OneToMany(() => Appointment, appointment => appointment.user)
-  appointment: Appointment;
-
-  @OneToMany(() => Appointment, appointment => appointment.provider)
-  provider: Appointment;
-
-  @Column()
   @Exclude()
   password: string;
+
+  @Column()
+  avatar: string;
 
   @Expose({ name: 'avatar_url' })
   getAvatarUrl(): string | null {
@@ -36,11 +35,12 @@ class User extends BaseEntity {
     }
 
     switch (process.env.STORAGE_DRIVER) {
+      case 'disk':
+        return `${process.env.APP_API_URL}/files/${this.avatar}`;
       case 's3':
         return `https://${uploadConfig.config.aws.bucket}.s3.amazonaws.com/${this.avatar}`;
-      case 'disk':
       default:
-        return `${process.env.APP_API_URL}/files/${this.avatar}`;
+        return null;
     }
   }
 }
