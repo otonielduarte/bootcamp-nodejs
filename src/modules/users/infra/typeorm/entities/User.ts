@@ -1,7 +1,8 @@
-import { Entity, Column, PrimaryGeneratedColumn, BaseEntity } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 import { Exclude, Expose } from 'class-transformer';
 
 import uploadConfig from '@config/upload';
+import BaseEntity from '@shared/infra/typeorm/entities/BaseEntity';
 
 @Entity('users')
 class User extends BaseEntity {
@@ -29,7 +30,7 @@ class User extends BaseEntity {
 
     switch (process.env.STORAGE_DRIVER) {
       case 'disk':
-        return `${process.env.APP_DOMAIN}/files/${this.avatar}`;
+        return `${process.env.APP_DOMAIN}:${process.env.APP_PORT}/files/${this.avatar}`;
       case 's3':
         return `https://${uploadConfig.config.aws.bucket}.s3.amazonaws.com/${this.avatar}`;
       default:

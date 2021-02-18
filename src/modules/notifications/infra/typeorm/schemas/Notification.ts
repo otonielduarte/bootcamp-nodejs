@@ -1,4 +1,4 @@
-import BaseEntity from '@modules/common/infra/typeorm/entities/BaseEntity';
+import BaseEntity from '@shared/infra/typeorm/entities/BaseEntity';
 import { Column, Entity, ObjectID, ObjectIdColumn } from 'typeorm';
 
 @Entity('notifications')

@@ -1,4 +1,4 @@
-import BaseEntity from '@modules/common/infra/typeorm/entities/BaseEntity';
+import BaseEntity from '@shared/infra/typeorm/entities/BaseEntity';
 import { Entity, Column, PrimaryGeneratedColumn, Generated } from 'typeorm';
 
 @Entity('user_tokens')

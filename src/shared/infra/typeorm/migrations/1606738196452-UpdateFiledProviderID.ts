@@ -4,14 +4,15 @@ import {
   TableColumn,
   TableForeignKey,
 } from 'typeorm';
+import { APPOINTMENTS } from '../../helpers/tables';
 
 export default class UpdateFiledProviderID1606738196452
   implements IMigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropColumn('appointments', 'provider');
+    await queryRunner.dropColumn(APPOINTMENTS, 'provider');
 
     await queryRunner.addColumn(
-      'appointments',
+      APPOINTMENTS,
       new TableColumn({
         name: 'provider_id',
         type: 'uuid',
@@ -20,7 +21,7 @@ export default class UpdateFiledProviderID1606738196452
     );
 
     await queryRunner.createForeignKey(
-      'appointments',
+      APPOINTMENTS,
       new TableForeignKey({
         name: 'AppointmentProvider',
         columnNames: ['provider_id'],
@@ -33,12 +34,12 @@ export default class UpdateFiledProviderID1606738196452
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropForeignKey('appointments', 'AppointmentProvider');
+    await queryRunner.dropForeignKey(APPOINTMENTS, 'AppointmentProvider');
 
-    await queryRunner.dropColumn('appointments', 'provider_id');
+    await queryRunner.dropColumn(APPOINTMENTS, 'provider_id');
 
     await queryRunner.addColumn(
-      'appointments',
+      APPOINTMENTS,
       new TableColumn({
         name: 'provider',
         type: 'varchar',

@@ -4,7 +4,7 @@ import { container } from 'tsyringe';
 import ListProviderDayAvailabilityService, {
   IRequest,
 } from '@modules/appointments/services/ListProviderDayAvailabilityService';
-import ICustomRequest from 'common/CustomRequest';
+import ICustomRequest from '@shared/infra/http/common/CustomRequest';
 
 export default class ProviderDayAvailabilityController {
   public async index(
