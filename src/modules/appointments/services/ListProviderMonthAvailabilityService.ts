@@ -23,7 +23,7 @@ class ListProviderMonthAvailability {
 
     @inject('CacheProvider')
     private cacheProvider: ICacheProvider,
-  ) { }
+  ) {}
 
   public async execute({
     provider_id,
@@ -46,7 +46,6 @@ class ListProviderMonthAvailability {
       );
       await this.cacheProvider.save(cacheKey, appointments);
     }
-
     const numberOfDaysInMonth = getDaysInMonth(new Date(year, month - 1));
 
     const eachDayArray = Array.from(

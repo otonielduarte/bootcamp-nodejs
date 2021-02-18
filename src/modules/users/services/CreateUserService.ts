@@ -17,12 +17,12 @@ class CreateUserService {
   constructor(
     @inject('UsersRepository')
     private repository: IUsersRepository,
-    @inject('HasProvider')
+    @inject('HashProvider')
     private hashProvider: IHashProvider,
 
     @inject('CacheProvider')
     private cacheProvider: ICacheProvider,
-  ) { }
+  ) {}
 
   public async execute({ name, email, password }: IUserRequest): Promise<User> {
     const exists = await this.repository.findByEmail(email);
