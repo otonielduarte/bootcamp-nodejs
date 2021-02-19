@@ -25,7 +25,7 @@ class ListProviderDayAvailabilityService {
 
     @inject('CacheProvider')
     private cacheProvider: ICacheProvider,
-  ) { }
+  ) {}
 
   public async execute({
     provider_id,

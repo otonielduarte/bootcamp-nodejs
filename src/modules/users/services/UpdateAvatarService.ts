@@ -16,7 +16,7 @@ class UpdateAvatarService {
 
     @inject('StorageProvider')
     private storageProvider: IStorageProvider,
-  ) { }
+  ) {}
 
   public async execute({ user_id, filename }: IRequest): Promise<User> {
     const user = await this.repository.findById(user_id);
