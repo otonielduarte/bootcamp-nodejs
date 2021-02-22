@@ -5,6 +5,7 @@ secrets.txt
 ormconfig.json
 
 coverage
+dist
 
 
 *.log
